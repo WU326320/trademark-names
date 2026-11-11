@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://api.deepseek.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>商标近似名称 · 生成工作台</title>
+  <link rel="stylesheet" href="base.css"><link rel="stylesheet" href="styles.css">
+  <script defer src="rules.js"></script><script defer src="engine.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#name">跳到名称输入</a>
+  <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">名</span><span>商标名称工作台<small>近似名称生成工具</small></span></div><div class="top-actions"><span class="prototype-tag">DeepSeek</span><button id="help" type="button" class="quiet">使用说明 ↗</button></div></header>
+  <main>
+    <section class="intro" aria-labelledby="page-title"><div><div class="eyebrow">名称探索 / NAME EXPLORER</div><h1 id="page-title">一个名称，更多近似可能。</h1><p>选择你关心的近似规则，把名称的不同变化整理在一起。</p></div><div class="intro-note"><span class="status-dot"></span><div><strong>DeepSeek 名称生成</strong><span>规则校验 · 分组整理 · 去重复制</span></div></div></section>
+    <section class="panel key-panel" aria-labelledby="key-title">
+      <div class="key-heading"><h2 id="key-title">你的 DeepSeek API Key</h2><span class="subtle">各自密钥 · 各自额度</span></div>
+      <div class="key-row"><label class="sr-only" for="api-key">DeepSeek API Key</label><input type="password" id="api-key" placeholder="粘贴自己的 API Key" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="key-hint connection"><button type="button" id="toggle-key" class="secondary" aria-pressed="false">显示</button><button type="button" id="test-key" class="secondary">测试连接</button><button type="button" id="clear-key" class="text-button">清除</button></div>
+      <p class="hint" id="key-hint">仅用于当前页面，刷新即清除；直接发送至 DeepSeek，不保存到网站服务器或浏览器存储。</p>
+      <p id="connection" role="status">未填写密钥，本地规则仍可使用。</p>
+    </section>
+    <div class="workspace">
+      <section class="panel controls" aria-labelledby="input-title">
+        <form id="generator" novalidate><fieldset id="controls-fieldset">
+          <div class="section-heading"><h2 id="input-title"><span class="step">1</span>输入商标名称</h2><span class="subtle">单个名称</span></div>
+          <label for="name" class="sr-only">商标名称</label><div class="input-wrap"><input id="name" autocomplete="off" placeholder="例如：途虎" aria-describedby="name-hint form-error"><span id="char-count">0 / 30</span></div>
+          <p id="name-hint" class="hint">输入 1–30 个字符；不会查询已注册商标。</p>
+          <div class="examples"><span>试一试</span><button type="button" data-example="途虎">途虎</button><button type="button" data-example="白兔">白兔</button><button type="button" data-example="白兔奶糖">白兔奶糖</button></div>
+          <div class="section-heading rules-heading"><h2><span class="step">2</span>选择近似规则</h2><div><button id="select-all" type="button" class="text-button">全选</button><span class="separator">/</span><button id="clear-selection" type="button" class="text-button">清空</button></div></div>
+          <div id="rule-options" class="rule-options" role="group" aria-label="近似规则（可多选）" aria-describedby="form-error"></div>
+          <div class="limit-note"><strong>每项目标 <span>50</span> 条</strong><p>展示校验后实际数量；AI 生成会使用账户额度。</p></div>
+          <p id="form-error" class="error" role="alert" hidden></p><button class="primary generate" id="generate" type="submit"><span>生成近似名称</span><span aria-hidden="true">→</span></button><p id="selection-count" class="selection-count">已选择 1 项规则 · 可多选</p>
+        </fieldset></form>
+        <div id="progress-area" hidden><div class="progress-row"><span id="progress-label" role="status">正在准备结果…</span><button type="button" id="cancel" class="text-button">取消</button></div><progress id="progress" value="0" max="100">0%</progress></div>
+      </section>
+      <section class="panel results" aria-labelledby="results-title" aria-busy="false">
+        <div class="results-heading"><div><div class="eyebrow">RESULTS</div><h2 id="results-title">生成结果 <span id="total-count" class="count-badge">0</span></h2></div><button type="button" id="copy-all" class="secondary" disabled>复制全部</button></div>
+        <p id="result-summary" class="result-summary" role="status">结果将按规则分组展示。</p><p id="stale-note" class="notice" hidden>输入或规则已修改，下方仍是上一次的结果。点击生成以更新。</p>
+        <div id="results-tools" hidden><label class="search-box"><span aria-hidden="true">⌕</span><input id="result-search" type="search" placeholder="在当前结果中查找名称" aria-label="查找结果"></label><div id="result-filters" class="filters" role="group" aria-label="筛选结果分组"></div></div>
+        <div id="result-content"><div class="empty-state"><div class="name-diagram" aria-hidden="true"><span>途虎</span><i>→</i><div><span>途<span class="changed">狐</span></span><span><span class="changed">猛</span>虎</span></div></div><h3>从一个熟悉的名称开始</h3><p>输入名称并勾选规则，<br>生成后即可按组查看、一键复制。</p><button type="button" id="try-example" class="secondary">填入「途虎」 →</button><small>上方名称为规则示意，实际结果以本次生成为准</small></div></div>
+        <div class="result-footer"><span class="status-dot"></span><span>候选名称仅供参考，不代表已注册、可注册或法律上的近似判断。</span></div>
+      </section>
+    </div><footer class="page-footer"><span>商标近似名称生成工具</span><span>输入名称 → 选择规则 → 整理结果</span></footer>
+  </main>
+  <dialog id="info-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title">使用说明</h2><button type="button" id="close-info" class="icon-button" aria-label="关闭说明">×</button></div><div id="dialog-content"></div><button type="button" id="ack-info" class="primary">知道了</button></dialog>
+  <dialog id="copy-dialog" aria-labelledby="copy-title"><div class="dialog-head"><h2 id="copy-title">手动复制</h2><button type="button" id="close-copy" class="icon-button" aria-label="关闭复制弹窗">×</button></div><p>浏览器未允许自动复制。请选中文本后复制。</p><label for="copy-text" class="sr-only">待复制的名称</label><textarea id="copy-text" readonly rows="8"></textarea><button type="button" id="select-copy" class="primary">选中全部文本</button></dialog>
+  <div id="toast" class="toast" role="status" hidden></div><noscript><p class="notice">请启用 JavaScript 以使用名称生成工具。</p></noscript>
+</body></html>
